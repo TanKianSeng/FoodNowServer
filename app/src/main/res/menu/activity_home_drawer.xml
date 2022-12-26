@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/navigationItem">
+        <item
+            android:id="@+id/navIcon_home"
+            android:icon="@drawable/ic_baseline_restaurant_menu_24"
+            android:iconTint="@android:color/white"
+            android:title="@string/IconMenu" />
+        <item
+            android:id="@+id/navIcon_cart"
+            android:icon="@drawable/ic_baseline_shopping_cart_24"
+            android:iconTint="@android:color/white"
+            android:title="@string/IconCart" />
+        <item
+            android:id="@+id/navIcon_order"
+            android:icon="@drawable/ic_baseline_access_time_24"
+            android:iconTint="@android:color/white"
+            android:title="@string/IconOrder" />
+        <item
+            android:id="@+id/navIcon_logout"
+            android:icon="@drawable/ic_baseline_exit_to_app_24"
+            android:iconTint="@android:color/white"
+            android:title="@string/IconLogout" />
+
+    </group>
+</menu>
