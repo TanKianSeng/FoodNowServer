@@ -17,32 +17,35 @@
 
         <info.hoang8f.widget.FButton
             android:id="@+id/btnSelect"
-            android:layout_width="0dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
+
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
             android:backgroundTint="@color/colorAccent"
-            android:text="Select"
+            android:text="Upload"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/btnUpload"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@+id/guideline6"
+            app:layout_constraintEnd_toStartOf="@+id/btnUpload"
             app:layout_constraintStart_toStartOf="parent" />
 
         <info.hoang8f.widget.FButton
             android:id="@+id/btnUpload"
-            android:layout_width="0dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
             android:backgroundTint="@color/colorPrimary"
             android:text="Upload"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/guideline6"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/btnSelect" />
 
 
         <EditText
@@ -50,19 +53,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="88dp"
             android:ems="10"
             android:hint="Name"
             android:importantForAutofill="no"
-            android:inputType= "text"
+            android:inputType="text"
             android:textColorHint="#D6D6D6"
             android:textSize="30sp"
-            app:layout_constraintBottom_toTopOf="@+id/btnSelect"
+            app:layout_constraintBottom_toTopOf="@+id/guideline6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextContrastCheck" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -70,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.62" />
+            app:layout_constraintGuide_percent="0.9" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

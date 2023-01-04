@@ -143,9 +143,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     private void showDialog() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
-        alertDialog.setTitle("Add new Category");
-        alertDialog.setMessage("Please fill up full information");
+        AlertDialog.Builder categoryDialog = new AlertDialog.Builder(Home.this);
+        categoryDialog.setTitle("Add new Category");
+        categoryDialog.setMessage("Please fill up full information");
 
         LayoutInflater inflater = this.getLayoutInflater();
         View add_menu_layout = inflater.inflate(R.layout.add_new_menu_layout,null);
@@ -159,22 +159,16 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         btnSelect.setOnClickListener(view -> chooseImage());
         btnUpload.setOnClickListener(view -> uploadImage());
         
-        alertDialog.setView(add_menu_layout);
-        alertDialog.setIcon(R.drawable.ic_baseline_shopping_cart_24);
-
-
-
-
-        alertDialog.setPositiveButton("Yes", (dialogInterface, i) -> {
+        categoryDialog.setView(add_menu_layout);
+        categoryDialog.setPositiveButton("Yes", (dialogInterface, i) -> {
             dialogInterface.dismiss();
             if (newCategory != null){
                 category.push().setValue(newCategory);
                 Snackbar.make(drawer,"New Category "+newCategory.getName()+" was added",Snackbar.LENGTH_SHORT).show();
             }
         });
-        alertDialog.setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss());
-        alertDialog.show();
-
+        categoryDialog.setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss());
+        categoryDialog.show();
 
     }
 
@@ -191,7 +185,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     .addOnSuccessListener(taskSnapshot -> {
                         mDialog.dismiss();
                         Toast.makeText(Home.this,"Uploaded completed.",Toast.LENGTH_SHORT).show();
-                        imageFolder.getDownloadUrl().addOnSuccessListener(uri -> newCategory = new Category(editTextName.getText().toString(),uri.toString()));
+                        imageFolder.getDownloadUrl().addOnSuccessListener(uri -> {
+                            newCategory = new Category(editTextName.getText().toString(), uri.toString());
+                        });
                     })
                     .addOnFailureListener(e -> {
                         mDialog.dismiss();
@@ -240,10 +236,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
                     //get Category ID and sent it to new Activity
                     //Toast.makeText(Home.this, adapter.getRef(position).getKey(), Toast.LENGTH_SHORT).show();//----test code for onClick functionality
-                    //Intent intent = new Intent(Home.this,FoodList.class);
+                    Intent intent = new Intent(Home.this,FoodList.class);
                     //Because Category ID is key, so we need to get key from this item
-                    //intent.putExtra("categoryId",adapter.getRef(position).getKey());
-                    //startActivity(intent);
+                    intent.putExtra("categoryId",adapter.getRef(position).getKey());
+                    startActivity(intent);
 
 
                 });
