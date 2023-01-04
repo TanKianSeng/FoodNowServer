@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androideatitserver.Common.Common;
 import com.example.androideatitserver.Model.Category;
 import com.example.androideatitserver.Model.Food;
 import com.example.androideatitserver.ViewHolder.FoodViewHolder;
@@ -214,5 +216,96 @@ public class FoodList extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         chooseImageActivityResultLauncher.launch(intent);
 
+    }
+
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getTitle().equals(Common.UPDATE)){
+            showUpdateDialog(adapter.getRef(item.getOrder()).getKey(),adapter.getItem(item.getOrder()));
+        }else if (item.getTitle().equals(Common.DELETE)){
+            deleteCategory(adapter.getRef(item.getOrder()).getKey());
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private void deleteCategory(String key) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(FoodList.this);
+        alertDialog.setTitle("Delete Category");
+        alertDialog.setMessage("Do you confirm to delete the selected category?");
+
+        alertDialog.setPositiveButton("Yes", (dialogInterface, i) -> {
+            dialogInterface.dismiss();
+            //Delete Category
+            foodList.child(key).removeValue();
+            Toast.makeText(FoodList.this,"Delete completed.",Toast.LENGTH_SHORT).show();
+        });
+        alertDialog.setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss());
+        alertDialog.show();
+
+
+    }
+
+    private void showUpdateDialog(String key, Food item) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(FoodList.this);
+        alertDialog.setTitle("Update Food");
+        alertDialog.setMessage("Please fill up full information");
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View add_food_layout = inflater.inflate(R.layout.add_new_food_layout,null);
+
+        btnSelect = add_food_layout.findViewById(R.id.btnSelect);
+        btnUpload = add_food_layout.findViewById(R.id.btnUpload);
+
+        editTextName = add_food_layout.findViewById(R.id.editTextName);
+        editTextDescription = add_food_layout.findViewById(R.id.editTextDescription);
+        editTextDiscount = add_food_layout.findViewById(R.id.editTextDiscount);
+        editTextPrice = add_food_layout.findViewById(R.id.editTextPrice);
+
+        editTextName.setText(item.getName());
+        editTextDescription.setText(item.getDescription());
+        editTextPrice.setText(item.getPrice());
+        editTextDiscount.setText(item.getDiscount());
+
+
+        alertDialog.setView(add_food_layout);
+
+        alertDialog.setPositiveButton("Yes", (dialogInterface, i) -> {
+            dialogInterface.dismiss();
+            //Update information
+            item.setName(editTextName.getText().toString());
+            item.setDescription(editTextDescription.getText().toString());
+            item.setPrice(editTextPrice.getText().toString());
+            item.setDiscount(editTextDiscount.getText().toString());
+            foodList.child(key).setValue(item);
+        });
+        alertDialog.setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss());
+        alertDialog.show();
+    }
+
+    private void changeImage(Food item) {
+        if (saveUri != null){
+            ProgressDialog mDialog = new ProgressDialog(this);
+            mDialog.setMessage("Uploading...");
+            mDialog.show();
+
+            String imageName = UUID.randomUUID().toString();
+            StorageReference imageFolder = storageReference.child("images/"+imageName);
+
+            imageFolder.putFile(saveUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        mDialog.dismiss();
+                        Toast.makeText(FoodList.this,"Uploaded completed.",Toast.LENGTH_SHORT).show();
+                        imageFolder.getDownloadUrl().addOnSuccessListener(uri ->
+                                item.setImage(uri.toString())
+                        );
+                    })
+                    .addOnFailureListener(e -> {
+                        mDialog.dismiss();
+                        Toast.makeText(FoodList.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnProgressListener(snapshot -> {
+                        double progress = (100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        mDialog.setMessage("Uploaded " +progress+ "%");
+                    });
+        }
     }
 }
