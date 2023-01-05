@@ -2,56 +2,45 @@ package com.example.androideatitserver;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androideatitserver.Common.Common;
-import com.example.androideatitserver.Model.Category;
-import com.example.androideatitserver.ViewHolder.MenuViewHolder;
-import com.example.androideatitserver.databinding.AddNewMenuLayoutBinding;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultCaller;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androideatitserver.Common.Common;
+import com.example.androideatitserver.Model.Category;
+import com.example.androideatitserver.ViewHolder.MenuViewHolder;
 import com.example.androideatitserver.databinding.ActivityHomeBinding;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
@@ -76,7 +65,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     Uri saveUri;
     Intent intent;
-    //private final int PICK_IMAGE_REQUEST = 71;
+
 
     Button btnSelect,btnUpload;
     EditText editTextName;
@@ -185,9 +174,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     .addOnSuccessListener(taskSnapshot -> {
                         mDialog.dismiss();
                         Toast.makeText(Home.this,"Uploaded completed.",Toast.LENGTH_SHORT).show();
-                        imageFolder.getDownloadUrl().addOnSuccessListener(uri -> {
-                            newCategory = new Category(editTextName.getText().toString(), uri.toString());
-                        });
+                        imageFolder.getDownloadUrl().addOnSuccessListener(uri -> newCategory = new Category(editTextName.getText().toString(), uri.toString()));
                     })
                     .addOnFailureListener(e -> {
                         mDialog.dismiss();
@@ -272,6 +259,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.navIcon_order){
+            Intent orders = new Intent(Home.this,OrderStatus.class);
+            startActivity(orders);
+        }
         return false;
     }
 
