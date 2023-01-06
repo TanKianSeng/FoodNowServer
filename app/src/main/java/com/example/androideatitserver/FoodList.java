@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androideatitserver.Common.Common;
-import com.example.androideatitserver.Model.Category;
 import com.example.androideatitserver.Model.Food;
 import com.example.androideatitserver.ViewHolder.FoodViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;

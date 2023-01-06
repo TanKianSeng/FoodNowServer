@@ -15,7 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androideatitserver.Common.Common;
+import com.example.androideatitserver.Interface.ItemClickListener;
+import com.example.androideatitserver.Model.Food;
 import com.example.androideatitserver.Model.Request;
+import com.example.androideatitserver.ViewHolder.FoodViewHolder;
+import com.example.androideatitserver.ViewHolder.OrderViewHolder;
 import com.example.androideatitserver.databinding.ActivityOrderStatusBinding;
 import com.example.androideatitserver.databinding.OrderLayoutBinding;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -25,28 +29,30 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 public class OrderStatus extends AppCompatActivity {
-    ActivityOrderStatusBinding binding;
-    OrderLayoutBinding orderLayoutBinding;
+
+    MaterialSpinner spinner;
 
     FirebaseDatabase db;
     DatabaseReference request;
-    MaterialSpinner spinner;
+    RecyclerView recyclerView;
 
     FirebaseRecyclerAdapter<Request, OrderViewHolder> adapter;
     RecyclerView.LayoutManager layoutManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityOrderStatusBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_order_status);
+        
 
         //setup database
         db = FirebaseDatabase.getInstance();
         request = db.getReference("Request");
 
-        binding.listOrders.setHasFixedSize(true);
+        recyclerView = findViewById(R.id.listOrders);
+        recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
-        binding.listOrders.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
+        
 
         loadOrders();
     }
@@ -59,34 +65,27 @@ public class OrderStatus extends AppCompatActivity {
 
         adapter = new FirebaseRecyclerAdapter<Request, OrderViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull OrderViewHolder holder, int position, @NonNull Request model) {
-
-
-                orderLayoutBinding.orderId.setText(adapter.getRef(position).getKey());
-                orderLayoutBinding.orderStatus.setText(convertCodeToStatus(model.getStatus()));
-                orderLayoutBinding.orderAddress.setText(model.getAddress());
-                orderLayoutBinding.orderPhone.setText(model.getPhone());
-
-
+            protected void onBindViewHolder(@NonNull OrderViewHolder viewHolder, int position, @NonNull Request model) {
+                viewHolder.txtOrderId.setText(adapter.getRef(position).getKey());
+                viewHolder.txtOrderStatus.setText(convertCodeToStatus(model.getStatus()));
+                viewHolder.txtOrderAddress.setText(model.getAddress());
+                viewHolder.txtOrderPhone.setText(model.getPhone());
+                viewHolder.setItemClickListener((view, position1, isLongClick) -> Toast.makeText(OrderStatus.this, "clicked", Toast.LENGTH_SHORT).show());
             }
 
             @NonNull
             @Override
             public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                orderLayoutBinding = OrderLayoutBinding.inflate(inflater,parent,false);
-
-                return new OrderViewHolder(orderLayoutBinding);
+                View itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.order_layout,parent,false);
+                return new OrderViewHolder(itemView);
             }
         };
-        binding.listOrders.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
+    }
 
-    }
-    public static class OrderViewHolder extends RecyclerView.ViewHolder{
-        public OrderViewHolder(@NonNull OrderLayoutBinding itemView) {
-            super(itemView.getRoot());
-        }
-    }
+
+
     private String convertCodeToStatus(String status){
         if (status.equals("0")){
             return "Placed";

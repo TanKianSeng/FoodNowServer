@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FoodNow</string>
+    <string name="app_name">FoodNowServer</string>
     <string name="slogan">We transport products to customers as quickly as your next 5 minutes later of alarm</string>
     <string name="buttonSignIn">SIGN IN</string>
     <string name="editTextPhoneNo">Phone Number</string>

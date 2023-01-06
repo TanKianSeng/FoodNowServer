@@ -27,8 +27,8 @@ public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnC
         itemView.setOnCreateContextMenuListener(this);
     }
 
-    public void setOnClickListener(ItemClickListener itemClickListener){
-        this.itemClickListener =itemClickListener;
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
     }
     @Override
     public void onClick(View v) {
@@ -39,6 +39,8 @@ public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnC
     public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
         contextMenu.setHeaderTitle("Select the Action");
         contextMenu.add(0,0,getBindingAdapterPosition(), Common.UPDATE);
-        contextMenu.add(0,0,getBindingAdapterPosition(),Common.DELETE);
+        contextMenu.add(0,1,getBindingAdapterPosition(),Common.DELETE);
     }
+
+
 }
